@@ -61,7 +61,7 @@ export default function UploadPage() {
       });
 
       const data = await res.json();
-      sessionStorage.setItem("statementData", JSON.stringify(data.cleanData));
+      sessionStorage.setItem("statementData", JSON.stringify(data.response));
       router.push("/review");
     } finally {
       setIsLoading(false);

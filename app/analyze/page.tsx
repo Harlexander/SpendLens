@@ -36,6 +36,7 @@ type CategoryTransaction = {
 };
 
 type Category = {
+  name: string,
   total_spent: number;
   count: number;
   transactions: CategoryTransaction[];
@@ -88,7 +89,7 @@ type AnalysisResult = {
     total: number;
     items: { type: string; total: number; count: number }[];
   };
-  categories: Record<string, Category>;
+  categories: Category[];
   unidentified: {
     date: string;
     description: string;
@@ -121,13 +122,15 @@ export default function AnalyzePage() {
       return;
     }
     const parsed = JSON.parse(raw);
+    console.log(parsed)
     setData(parsed.message ?? parsed);
   }, [router]);
 
   if (!data) return null;
 
+  console.log(data)
   const { summary, spending_days, top_recipients, top_senders, fees_and_charges, categories, unidentified } = data;
-  const categoryEntries = Object.entries(categories ?? {});
+  const categoryEntries = Object.entries(Object.fromEntries(categories.map(c => [c.name, c])));
   const isPositive = summary.net_cash_flow >= 0;
 
   return (
